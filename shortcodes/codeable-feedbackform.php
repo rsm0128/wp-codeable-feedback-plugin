@@ -33,7 +33,7 @@ if ( ! class_exists( 'CodeableSC_FeedbackForm' ) ) {
             // register shortcode
             add_shortcode( 'codeable_feedbackform', array( $this, 'render' ) );
 
-            // handle ajax submit request
+            // handle ajax submit request for both logged in and not-logged in users
             add_action( 'wp_ajax_' . $this->submit_action_str, array( $this, 'submit' ) );
             add_action( 'wp_ajax_nopriv_' . $this->submit_action_str, array( $this, 'submit' ) );
         }
@@ -49,11 +49,12 @@ if ( ! class_exists( 'CodeableSC_FeedbackForm' ) ) {
          */
         public function render( $args, $content = '' ) {
 
-            // if user logged in prepare pre-filled data
+            // init variables
             $user_firstname = '';
             $user_lastname = '';
             $user_email = '';
 
+            // if user logged in prepare pre-filled data
             if ( is_user_logged_in() ) {
                 $current_user = wp_get_current_user();
 
@@ -74,7 +75,7 @@ if ( ! class_exists( 'CodeableSC_FeedbackForm' ) ) {
                     </div><!-- end of .feedback-form-header -->
 
                     <div class="feedback-form-body">
-                        <form class="feedback-form" action="" method="post" onsubmit="feedback_form_submit(event)">
+                        <form class="feedback-form" action="" method="post" onsubmit="javascript:void(0)">
                             <div class="input-block">
                                 <label for="first-name"><?php esc_html_e( 'First Name', 'codeable' ) ?></label>
                                 <input id="first-name" name="first_name" type="text" class="input-field" value="<?php echo esc_attr( $user_firstname ) ?>" required>

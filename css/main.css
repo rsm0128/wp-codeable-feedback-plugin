@@ -1,4 +1,12 @@
-/* general */
+/**
+ * Wordpress Codeable Feedbacks plugin stylesheet
+ * Developed by XueZhe Quan
+ * codeable.io | @xuezhe
+ */
+
+
+/* general styles */
+
 @-webkit-keyframes codeable-rotate {
   to {
     -webkit-transform:rotate(1turn);
@@ -13,6 +21,9 @@
   }
 }
 
+
+/* ajax loader */
+
 .codeable-loader {
   display: none;
   position: absolute;
@@ -22,10 +33,6 @@
   top: 0;
   background: #fff;
   opacity: 0.6;
-}
-
-.loading .codeable-loader {
-  display: flex;
   justify-content: center;
   align-items: center;
 }
@@ -41,6 +48,13 @@
   -webkit-animation: codeable-rotate .75s linear infinite;
   animation: codeable-rotate .75s linear infinite;
 }
+
+.loading .codeable-loader {
+  display: flex;
+}
+
+
+/* pagination */
 
 .codeable-pagination {
     display: flex;
@@ -70,6 +84,9 @@
     background-color: #333;
     color: #fff;
 }
+
+
+/* container styling  */
 
 .codeable-block {
   position: relative;
@@ -101,10 +118,6 @@
   background: #fff;
 }
 
-#feedback-form-wrapper.codeable-success .feedback-form-container {
-  display: none;
-}
-
 #feedback-form-wrapper h2 {
   margin: 0 auto 3rem;
 }
@@ -127,7 +140,11 @@
   width: 100%;
 }
 
-.feedback-form-header {
+.codeable-success .feedback-form-container {
+  display: none;
+}
+
+.feedback-form-container .feedback-form-header {
   margin-bottom: 30px;
 }
 
@@ -137,6 +154,7 @@
 
 
 /* feedback list shortcode */
+
 #feedback-list-wrapper {
   position: relative;  
   border: 1px solid #000;
@@ -171,6 +189,7 @@
   flex-basis: 120px;
   flex-grow: 0;
 }
+
 .feedback-detail-row div {
   flex-basis: 0;
   flex-grow: 1;

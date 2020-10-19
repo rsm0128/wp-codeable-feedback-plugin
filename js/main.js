@@ -1,66 +1,69 @@
-// feedback form submit handle function
-let feedback_form_submit = function(e) {
-  // prevent submit
-  e.preventDefault();
+/**
+ * Wordpress Codeable Feedbacks plugin main script
+ * Developed by XueZhe Quan
+ * codeable.io | @xuezhe
+ */
 
-  // init data
-  let $form = jQuery(e.target);
-  let $wrapper = $form.closest('.codeable-block');
-
+(function($) {
   let ajax_url = codeable_var.ajax_url;
-  let form_data = $form.serialize();
 
-  // remove error message and show loader
-  $wrapper.removeClass('codeable-error').addClass('loading');
+  /* feedback form submit function */
+  let feedback_form_submit = function(event) {
+    // prevent form submit
+    event.preventDefault();
 
-  // ajax feedback submit
-  jQuery.ajax({
-    url: ajax_url,
-    method: 'POST',
-    dataType: 'json',
-    data: form_data,
-    success: function(response) {
-      if ( response.success ) {
-        // handle success
-        // remove form and show success message
-        $wrapper.addClass('codeable-success');
+    // init variables
+    let $form = $(event.target);
+    let $wrapper = $form.closest('.codeable-block');
+    let form_data = $form.serialize();
 
-        // scroll to top to show the message
-        $wrapper.get(0).scrollIntoView({behavior: "smooth"});
+    // remove error message and show loader
+    // loader will be hidden after ajax handling
+    $wrapper.removeClass('codeable-error').addClass('loading');
 
-      } else {
-        // handle error
-        // show error message
-        $form.find('.error-message').html(response.data.message);
+    // ajax feedback submit
+    $.ajax({
+      url: ajax_url,
+      method: 'POST',
+      dataType: 'json',
+      data: form_data,
+      success: function(response) {
+        if ( response.success ) {
+          // handle success
+          // remove form and show success message
+          $wrapper.addClass('codeable-success');
+
+          // scroll to top to show the message
+          $wrapper.get(0).scrollIntoView();
+
+        } else {
+          // handle error
+          // show error message
+          $form.find('.error-message').html(response.data.message);
+          $wrapper.addClass('codeable-error');
+        }
+      },
+      error: function(xhr, ajaxOptions, thrownError) {
+        // show error response text
+        $form.find('.error-message').html(xhr.status + ' : ' + xhr.statusText);
         $wrapper.addClass('codeable-error');
+      },
+      complete: function() {
+        // remove loader
+        $wrapper.removeClass('loading');
       }
-    },
-    error: function(xhr, ajaxOptions, thrownError) {
-      // show error response text
-      $form.find('.error-message').html(xhr.status + ' : ' + xhr.statusText);
-      $wrapper.addClass('codeable-error');
-    },
-    complete: function() {
-      // remove loader
-      $wrapper.removeClass('loading');
-    }
 
-  });
+    });
+  }
 
-}
-
-jQuery(document).ready(function(){
-
-  let ajax_url = codeable_var.ajax_url;
-
-  // function to update feedback list by ajax request
+  /* get feedback list ajax request function */
   let feedback_list_load = function( $wrapper, page = 1, per_page = 10 ) {
 
     // remove error message and show loader
     $wrapper.removeClass('codeable-error').addClass('loading');
 
     // ajax pull list
-    jQuery.ajax({
+    $.ajax({
       url: ajax_url,
       method: 'POST',
       dataType: 'json',
@@ -98,12 +101,12 @@ jQuery(document).ready(function(){
     });
   }
 
-  // function to get feedback detail by ajax request
+  /* get feedback detail ajax request function */
   let feedback_detail_load = function( $wrapper, feedback_id ) {
     $wrapper.removeClass('codeable-error').addClass('loading');
 
     // ajax pull list
-    jQuery.ajax({
+    $.ajax({
       url: ajax_url,
       method: 'POST',
       dataType: 'json',
@@ -116,7 +119,6 @@ jQuery(document).ready(function(){
         if ( response.success ) {
           // render detail block
           render_feedback_detail($wrapper, response.data.item)
-
         } else {
           // handle error
           $wrapper.find('.error-message').html(response.data.message);
@@ -136,7 +138,7 @@ jQuery(document).ready(function(){
     });
   }
 
-  // function to render feedback list
+  /* feedback list render function */
   let render_feedback_list = function( $wrapper, feedback_items ) {
     if ( feedback_items.length ) {
       // hidden the empty message
@@ -162,7 +164,7 @@ jQuery(document).ready(function(){
     }
   }
 
-  // pagination render function
+  /* feedback pagination render function */
   let render_pagination = function( $wrapper, page, per_page, total_count ) {
 
     if ( total_count <= per_page ) {
@@ -178,16 +180,19 @@ jQuery(document).ready(function(){
           displayedPages: 3,
           edges: 1,
           onPageClick(pageNumber, event) {
+            // stop default behavior
+            event.preventDefault();
             // load new list
             feedback_list_load( $wrapper, pageNumber, per_page );
             // scroll to top
-            $wrapper.get(0).scrollIntoView({behavior: "smooth"});
+            $wrapper.closest('#feedback-list-wrapper').get(0).scrollIntoView({behavior: "smooth"});
           }
         }
       );
     }
   }
 
+  /* feedback detail block render function */
   let render_feedback_detail = function( $wrapper, item ) {
     $wrapper.find('.txt-id').text(item.id);
     $wrapper.find('.txt-first-name').text(item.first_name);
@@ -197,17 +202,22 @@ jQuery(document).ready(function(){
     $wrapper.find('.txt-message').text(item.message);
   }
 
-  // see details action
-  jQuery('.feedback-list-table .feedback-list').on('click', 'tr', function(){
-    let id = jQuery(this).data('id');
-    let $wrapper = jQuery(this).closest('#feedback-list-wrapper').find('.feedback-detail-container');
-    feedback_detail_load( $wrapper, id );
-  });
+  $(document).ready(function(){
+    // attach ajax form submission to form
+    $('.feedback-form').on('submit', feedback_form_submit);
 
-  // update all feedback lists on document ready
-  if ( jQuery('#feedback-list-wrapper').length ) {
-    jQuery('#feedback-list-wrapper').each(function(index){
-      feedback_list_load(jQuery(this).find('.feedback-list-container'), 1, 10 );
-    })
-  }
-});
+    // see details action
+    $('.feedback-list-table .feedback-list').on('click', 'tr', function(){
+      let id = $(this).data('id');
+      let $wrapper = $(this).closest('#feedback-list-wrapper').find('.feedback-detail-container');
+      feedback_detail_load( $wrapper, id );
+    });
+
+    // update all feedback lists on document ready
+    if ( $('#feedback-list-wrapper').length ) {
+      $('#feedback-list-wrapper').each(function(index){
+        feedback_list_load($(this).find('.feedback-list-container'), 1, 10 );
+      })
+    }
+  });
+})(jQuery);
