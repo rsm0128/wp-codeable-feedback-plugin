@@ -1,0 +1,142 @@
+# Translation of the WordPress plugin Codeable Feedbacks.
+# Copyright (C) 2020 Codeable
+# This file is distributed under the same license as the Codeable Feedbacks package.
+# FIRST AUTHOR <XUEZHE@CODEABLE.IO>, 2020.
+msgid ""
+msgstr ""
+"Project-Id-Version: codeable\n"
+"POT-Creation-Date: 2020-10-19 14:38+0900\n"
+"PO-Revision-Date: 2020-10-19 14:39+0900\n"
+"Last-Translator: xuezhe@codeable.io\n"
+"Language-Team: xuezhe@codeable.io\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.4.1\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: __;_e;esc_attr__;esc_attr_e;esc_html__;esc_html_e\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: codeable-feedbacks.php:39
+msgid "Add Feedback"
+msgstr ""
+
+#: codeable-feedbacks.php:40
+msgid "Add New Feedback"
+msgstr ""
+
+#: codeable-feedbacks.php:41
+msgid "Edit Feedback"
+msgstr ""
+
+#: codeable-feedbacks.php:42
+msgid "New Feedback"
+msgstr ""
+
+#: codeable-feedbacks.php:43
+msgid "All Feedbacks"
+msgstr ""
+
+#: codeable-feedbacks.php:44
+msgid "View Feedback"
+msgstr ""
+
+#: codeable-feedbacks.php:45
+msgid "Search Feedbacks"
+msgstr ""
+
+#: codeable-feedbacks.php:46
+msgid "Nothing found"
+msgstr ""
+
+#: codeable-feedbacks.php:47
+msgid "Nothing found in Trash"
+msgstr ""
+
+#: shortcodes/codeable-feedbackform.php:69
+msgid "Thank you for sending us your feedback"
+msgstr ""
+
+#: shortcodes/codeable-feedbackform.php:73
+msgid "Submit your feedback"
+msgstr ""
+
+#: shortcodes/codeable-feedbackform.php:79
+#: shortcodes/codeable-feedbacklist.php:65
+#: shortcodes/codeable-feedbacklist.php:96
+msgid "First Name"
+msgstr ""
+
+#: shortcodes/codeable-feedbackform.php:84
+#: shortcodes/codeable-feedbacklist.php:66
+#: shortcodes/codeable-feedbacklist.php:100
+msgid "Last Name"
+msgstr ""
+
+#: shortcodes/codeable-feedbackform.php:89
+#: shortcodes/codeable-feedbacklist.php:67
+#: shortcodes/codeable-feedbacklist.php:104
+msgid "Email"
+msgstr ""
+
+#: shortcodes/codeable-feedbackform.php:94
+#: shortcodes/codeable-feedbacklist.php:68
+#: shortcodes/codeable-feedbacklist.php:108
+msgid "Subject"
+msgstr ""
+
+#: shortcodes/codeable-feedbackform.php:99
+#: shortcodes/codeable-feedbacklist.php:112
+msgid "Message"
+msgstr ""
+
+#: shortcodes/codeable-feedbackform.php:106
+msgid "Submit"
+msgstr ""
+
+#: shortcodes/codeable-feedbackform.php:109
+msgid "Something is wrong!"
+msgstr ""
+
+#: shortcodes/codeable-feedbackform.php:143
+#: shortcodes/codeable-feedbacklist.php:152
+#: shortcodes/codeable-feedbacklist.php:203
+msgid "Nonce Error"
+msgstr ""
+
+#: shortcodes/codeable-feedbackform.php:152
+#, php-format
+msgid "Field %s is required"
+msgstr ""
+
+#: shortcodes/codeable-feedbackform.php:162
+msgid "Email is not valid"
+msgstr ""
+
+#: shortcodes/codeable-feedbacklist.php:55
+msgid "You are not authorized to view the content of this page."
+msgstr ""
+
+#: shortcodes/codeable-feedbacklist.php:72
+msgid "No feedbacks found."
+msgstr ""
+
+#: shortcodes/codeable-feedbacklist.php:92
+msgid "ID"
+msgstr ""
+
+#: shortcodes/codeable-feedbacklist.php:145
+#: shortcodes/codeable-feedbacklist.php:196
+msgid "You don't have the permission to see the list"
+msgstr ""
+
+#: shortcodes/codeable-feedbacklist.php:178
+#: shortcodes/codeable-feedbacklist.php:223
+msgid "success"
+msgstr ""
+
+#: shortcodes/codeable-feedbacklist.php:210
+#: shortcodes/codeable-feedbacklist.php:230
+msgid "Wrong Feedback ID"
+msgstr ""
