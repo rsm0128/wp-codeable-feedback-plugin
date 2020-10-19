@@ -167,8 +167,9 @@
   /* feedback pagination render function */
   let render_pagination = function( $wrapper, page, per_page, total_count ) {
 
-    if ( total_count <= per_page ) {
+    if ( total_count <= per_page && page == 1 ) {
       // if just only one page available, hide pagination
+      // added page == 1 comparision to fix an edge case
       $wrapper.find('.codeable-pagination').hide();
     } else {
       // render pagination
