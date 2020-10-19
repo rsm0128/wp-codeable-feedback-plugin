@@ -15,13 +15,21 @@ if ( ! class_exists( 'CodeableSC_FeedbackList' ) ) {
     class CodeableSC_FeedbackList {
 
         /**
-         * Name string for ajax form submit action and nonce
+         * action and nonce name for ajax get list request
          *
          * @access private
          * @since 1.0
          * @var string
          */
         private $get_list_action_str = 'codeable_feedback_get_list';
+
+        /**
+         * action and nonce name for ajax get detail request
+         *
+         * @access private
+         * @since 1.0
+         * @var string
+         */
         private $get_detail_action_str = 'codeable_feedback_get_detail';
 
         /**
@@ -34,7 +42,7 @@ if ( ! class_exists( 'CodeableSC_FeedbackList' ) ) {
             // register shortcode
             add_shortcode( 'codeable_feedbacklist', array( $this, 'render' ) );
 
-            // handle ajax submit request
+            // handle ajax request for logged-in users
             add_action( 'wp_ajax_' . $this->get_list_action_str, array( $this, 'get_list' ) );
             add_action( 'wp_ajax_' . $this->get_detail_action_str, array( $this, 'get_detail' ) );
         }
@@ -57,19 +65,23 @@ if ( ! class_exists( 'CodeableSC_FeedbackList' ) ) {
                 <?php
                 // disallow non-admin users to see the list
                 if ( ! current_user_can( 'manage_options' ) ) { ?>
+
                     <div class="not-authorized-error">
                         <?php esc_html_e( 'You are not authorized to view the content of this page.', 'codeable' ); ?>
                     </div>
+
                 <?php } else { ?>
 
-                    <div class="feedback-list-container codeable-block" _nonce="<?php echo esc_attr( wp_create_nonce( $this->get_list_action_str ) ) ?>">
+                    <div class="feedback-list-container codeable-block" data-nonce="<?php echo esc_attr( wp_create_nonce( $this->get_list_action_str ) ) ?>">
                         <div class="feedback-list-table">
                             <table>
                                 <thead>
-                                    <th><?php esc_html_e( 'First Name', 'codeable' ) ?></th>
-                                    <th><?php esc_html_e( 'Last Name', 'codeable' ) ?></th>
-                                    <th><?php esc_html_e( 'Email', 'codeable' ) ?></th>
-                                    <th><?php esc_html_e( 'Subject', 'codeable' ) ?></th>
+                                    <tr>
+                                        <th><?php esc_html_e( 'First Name', 'codeable' ) ?></th>
+                                        <th><?php esc_html_e( 'Last Name', 'codeable' ) ?></th>
+                                        <th><?php esc_html_e( 'Email', 'codeable' ) ?></th>
+                                        <th><?php esc_html_e( 'Subject', 'codeable' ) ?></th>
+                                    </tr>
                                 </thead>
                                 <tbody class="empty-row">
                                     <tr>
@@ -85,12 +97,13 @@ if ( ! class_exists( 'CodeableSC_FeedbackList' ) ) {
                             <div class="codeable-loader">
                                 <div class="codeable-spinner"></div>
                             </div>
-                        </div>
-                        <nav class="codeable-pagination">
-                        </nav>
+                        </div><!-- end of .feedback-list-table -->
+
+                        <nav class="codeable-pagination"></nav><!-- end of pagination -->
+
                     </div><!-- end of .feedback-list-container -->
 
-                    <div class="feedback-detail-container codeable-block" _nonce="<?php echo esc_attr( wp_create_nonce( $this->get_detail_action_str ) ) ?>">
+                    <div class="feedback-detail-container codeable-block" data-nonce="<?php echo esc_attr( wp_create_nonce( $this->get_detail_action_str ) ) ?>">
                         <div class="feedback-detail">
                             <div class="feedback-detail-row">
                                 <label><?php esc_html_e( 'ID', 'codeable' ) ?></label>
@@ -116,12 +129,15 @@ if ( ! class_exists( 'CodeableSC_FeedbackList' ) ) {
                                 <label><?php esc_html_e( 'Message', 'codeable' ) ?></label>
                                 <div class="txt-message"></div>
                             </div>
-                        </div>
+                        </div><!-- end of .feedback-detail -->
+
                         <div class="error-message"></div>
+
                         <div class="codeable-loader">
                             <div class="codeable-spinner"></div>
                         </div>
-                    </div>
+
+                    </div><!-- end of .feedback-detail-container -->
 
                 <?php } // end of if ?>
 
@@ -137,7 +153,7 @@ if ( ! class_exists( 'CodeableSC_FeedbackList' ) ) {
         }
 
         /**
-         * Get feedback list from db by pagination and send json
+         * Get feedback list from db and send json
          *
          * @access public
          * @since 1.0
@@ -159,10 +175,9 @@ if ( ! class_exists( 'CodeableSC_FeedbackList' ) ) {
                 ) );
             }
 
-            // sanitize input data
+            // sanitize numberic input data
             $page = ( ! isset( $_POST['page'] ) || ! is_numeric( $_POST['page'] ) ) ? 1 : $_POST['page'];
             $per_page = ( ! isset( $_POST['per_page'] ) || ! is_numeric( $_POST['per_page'] ) ) ? 10 : $_POST['per_page'];
-
 
             // fetch posts from database
             $feedback_posts = get_posts(
@@ -170,20 +185,28 @@ if ( ! class_exists( 'CodeableSC_FeedbackList' ) ) {
                     'post_type' => 'codeable_feedback',
                     'numberposts' => $per_page,
                     'paged'         => $page,
+                    'post_status' => 'publish'
                 )
             );
 
             // prepare feedback list
             $list = array();
             foreach ( $feedback_posts as $feedback_post ) {
-                $list[] = $this->get_fields_by_id( $feedback_post->ID );
+                $item = $this->get_item_by_id( $feedback_post->ID );
+
+                if ( $item ) {
+                    $list[] = $item;
+                }
             }
+
+            // calculate total feedback
+            $total_count = wp_count_posts( 'codeable_feedback' )->publish;
 
             // send result
             wp_send_json_success( array(
                 'message' => esc_html__( 'success', 'codeable' ),
                 'list' => $list,
-                'total_count' => wp_count_posts( 'codeable_feedback' )->publish
+                'total_count' => $total_count
             ) );
         }
 
@@ -221,21 +244,28 @@ if ( ! class_exists( 'CodeableSC_FeedbackList' ) ) {
             $feedback_id = sanitize_text_field( $_POST['id'] );
 
             $feedback = get_post( $feedback_id, ARRAY_A );
+
+            // check post_type and post_status
             if ( is_array( $feedback )
                 && $feedback['post_type'] == 'codeable_feedback'
                 && $feedback['post_status'] == 'publish' ) {
 
-                wp_send_json_success( array(
-                    'message' => esc_html__( 'success', 'codeable' ),
-                    'item' => $this->get_fields_by_id( $feedback_id )
-                ) );
+                $item = $this->get_item_by_id( $feedback_id );
+                if ( $item ) {
 
-            } else {
-                // post not found
-                wp_send_json_error( array(
-                    'message' => esc_html__( 'Wrong Feedback ID', 'codeable' )
-                ) );
+                    // if found valid data send json and die
+                    wp_send_json_success( array(
+                        'message' => esc_html__( 'success', 'codeable' ),
+                        'item' => $item
+                    ) );
+
+                }
             }
+
+            // error handling
+            wp_send_json_error( array(
+                'message' => esc_html__( 'Wrong Feedback ID', 'codeable' )
+            ) );
         }
 
         /**
@@ -245,16 +275,21 @@ if ( ! class_exists( 'CodeableSC_FeedbackList' ) ) {
          * @since 1.0
          * @return array().
          */
-        private function get_fields_by_id( $feedback_post_id ) {
-            $meta = get_post_meta( $feedback_post_id, '', true );
+        private function get_item_by_id( $feedback_post_id ) {
+            $meta = get_post_meta( $feedback_post_id, '' );
+
+            // validation
+            if ( ! is_array( $meta ) ) {
+                return false;
+            }
 
             // apply default data
             $meta = wp_parse_args( $meta, array(
-                'first_name' => array( '' ),
-                'last_name' => array( '' ),
-                'email' => array( '' ),
-                'subject' => array( '' ),
-                'message' => array( '' ),
+                'first_name' => array(''),
+                'last_name' => array(''),
+                'email' => array(''),
+                'subject' => array(''),
+                'message' => array(''),
             ) );
 
             return array(

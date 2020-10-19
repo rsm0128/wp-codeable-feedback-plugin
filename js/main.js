@@ -69,7 +69,7 @@
       dataType: 'json',
       data: {
         action: 'codeable_feedback_get_list',
-        _nonce: $wrapper.attr('_nonce'),
+        _nonce: $wrapper.data('nonce'),
         page,
         per_page
       },
@@ -112,7 +112,7 @@
       dataType: 'json',
       data: {
         action: 'codeable_feedback_get_detail',
-        _nonce: $wrapper.attr('_nonce'),
+        _nonce: $wrapper.data('nonce'),
         id: feedback_id,
       },
       success: function(response) {
@@ -194,6 +194,7 @@
 
   /* feedback detail block render function */
   let render_feedback_detail = function( $wrapper, item ) {
+    $wrapper.find('.feedback-detail').show();
     $wrapper.find('.txt-id').text(item.id);
     $wrapper.find('.txt-first-name').text(item.first_name);
     $wrapper.find('.txt-last-name').text(item.last_name);

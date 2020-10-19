@@ -88,10 +88,10 @@ add_action( 'init', 'codeable_init_shortcodes' );
  * @return void
  */
 function codeable_enqueue_scripts() {
-	wp_enqueue_style( 'codeable_feedbacks_style', CODEABLE_FEEDBACKS_URL . 'css/main.css', array(), CODEABLE_FEEDBACKS_VERSION );
+	wp_enqueue_style( 'codeable_feedbacks_style', CODEABLE_FEEDBACKS_URL . 'css/main.min.css', array(), CODEABLE_FEEDBACKS_VERSION );
 
-	wp_enqueue_script( 'jquery-pagination', CODEABLE_FEEDBACKS_URL . 'js/jquery.simplePagination.js', array( 'jquery' ), CODEABLE_FEEDBACKS_VERSION, true );
-	wp_enqueue_script( 'codeable_feedbacks_script', CODEABLE_FEEDBACKS_URL . 'js/main.js', array( 'jquery', 'jquery-pagination' ), CODEABLE_FEEDBACKS_VERSION, true );
+	wp_enqueue_script( 'jquery-pagination', CODEABLE_FEEDBACKS_URL . 'js/jquery.simplePagination.min.js', array( 'jquery' ), CODEABLE_FEEDBACKS_VERSION, true );
+	wp_enqueue_script( 'codeable_feedbacks_script', CODEABLE_FEEDBACKS_URL . 'js/main.min.js', array( 'jquery', 'jquery-pagination' ), CODEABLE_FEEDBACKS_VERSION, true );
 
 	// localize variables
 	wp_localize_script( 'codeable_feedbacks_script', 'codeable_var', array(
@@ -109,7 +109,6 @@ add_action( 'wp_enqueue_scripts', 'codeable_enqueue_scripts' );
  * @return void
  */
 function codeable_load_textdomain() {
-// var_dump(determine_locale()); exit;
   load_plugin_textdomain( 'codeable', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 }
 // Make Plugin Translation Ready

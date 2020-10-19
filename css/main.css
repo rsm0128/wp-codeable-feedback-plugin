@@ -39,8 +39,8 @@
 
 .codeable-loader .codeable-spinner {
   display: inline-block;
-  width: 2rem;
-  height: 2rem;
+  width: 3rem;
+  height: 3rem;
   vertical-align: text-bottom;
   border: .25em solid;
   border-right: .25em solid transparent;
@@ -57,19 +57,20 @@
 /* pagination */
 
 .codeable-pagination {
-    display: flex;
-    justify-content: center;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
 }
 
 .codeable-pagination ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
 }
-        
+
 .codeable-pagination ul li {
-    margin: 0 1px;
+  margin: 0 1px;
 }
 
 .codeable-pagination a, .codeable-pagination span {
@@ -78,11 +79,12 @@
   border: 1px solid #999;
   border-radius: .2em;
   text-decoration: none !important;
+  line-height: 1.5;
 }
 
 .codeable-pagination .active span, .codeable-pagination a:hover {
-    background-color: #333;
-    color: #fff;
+  background-color: #333;
+  color: #fff;
 }
 
 
@@ -162,12 +164,28 @@
   background: #fff;
 }
 
+.feedback-list-table table {
+  width: 100%;
+}
+
 .feedback-list-table tbody tr {
   cursor: pointer;
 }
 
 .feedback-list-table tbody tr:hover {
   background: #ccc;
+}
+
+.feedback-list-table th, .feedback-list-table td {
+  border: 0.1rem solid #dcd7ca;
+  line-height: 1.4;
+  margin: 0;
+  overflow: visible;
+  padding: 0.5em;
+}
+
+.feedback-list-table th {
+  font-weight: 700;
 }
 
 .has-data .empty-row {
@@ -179,6 +197,10 @@
   padding-top: 20px;
   border-top: 2px solid #000;
   min-height: 40px;
+}
+
+.feedback-detail {
+  display: none;
 }
 
 .feedback-detail-row {

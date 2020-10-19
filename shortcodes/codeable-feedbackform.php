@@ -15,7 +15,7 @@ if ( ! class_exists( 'CodeableSC_FeedbackForm' ) ) {
     class CodeableSC_FeedbackForm {
 
         /**
-         * Name string for ajax form submit action and nonce
+         * action and nonce name for ajax form submit request
          *
          * @access private
          * @since 1.0
@@ -49,11 +49,6 @@ if ( ! class_exists( 'CodeableSC_FeedbackForm' ) ) {
          */
         public function render( $args, $content = '' ) {
 
-            // init variables
-            $user_firstname = '';
-            $user_lastname = '';
-            $user_email = '';
-
             // if user logged in prepare pre-filled data
             if ( is_user_logged_in() ) {
                 $current_user = wp_get_current_user();
@@ -61,6 +56,11 @@ if ( ! class_exists( 'CodeableSC_FeedbackForm' ) ) {
                 $user_firstname = $current_user->user_firstname;
                 $user_lastname = $current_user->user_lastname;
                 $user_email = $current_user->user_email;
+            } else {
+                // init variables
+                $user_firstname = '';
+                $user_lastname = '';
+                $user_email = '';
             }
 
             ob_start(); ?>
@@ -69,13 +69,14 @@ if ( ! class_exists( 'CodeableSC_FeedbackForm' ) ) {
                 <div class="success-message">
                     <?php esc_html_e( 'Thank you for sending us your feedback', 'codeable' ) ?>
                 </div>
+
                 <div class="feedback-form-container">
                     <div class="feedback-form-header">
                         <h2 class="feedback-form-title"><?php esc_html_e( 'Submit your feedback', 'codeable' ) ?></h2>
                     </div><!-- end of .feedback-form-header -->
 
                     <div class="feedback-form-body">
-                        <form class="feedback-form" action="" method="post" onsubmit="javascript:void(0)">
+                        <form class="feedback-form" action="/" method="post" onsubmit="javascript:void(0)">
                             <div class="input-block">
                                 <label for="first-name"><?php esc_html_e( 'First Name', 'codeable' ) ?></label>
                                 <input id="first-name" name="first_name" type="text" class="input-field" value="<?php echo esc_attr( $user_firstname ) ?>" required>
@@ -106,6 +107,7 @@ if ( ! class_exists( 'CodeableSC_FeedbackForm' ) ) {
                                 <?php wp_nonce_field( $this->submit_action_str ) ?>
                                 <button type="Submit"><?php esc_html_e( 'Submit', 'codeable' ) ?></button>
                             </div>
+
                             <div class="error-message">
                                 <?php esc_html_e( 'Something is wrong!', 'codeable' ) ?>
                             </div>
