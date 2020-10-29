@@ -12,8 +12,8 @@ A customizable, easy-to-use feedback submit/list plugin!
 
 == Description ==
 
-You can use shortcode [codeable-feedbackform] to add a submit form.
-And shortcode [codeable-feedbacklist] is to show the submitted feedback list.
+You can use shortcode [codeable_feedbackform] to add a submit form.
+And shortcode [codeable_feedbacklist] is to show the submitted feedback list.
 
 = 2020-10-20 - v1.0 =
 Initial Release
